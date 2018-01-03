@@ -1,0 +1,47 @@
+.primary-number-box-effect {
+  position: relative;
+  top: 15px;
+  z-index: 0;
+  }
+
+.primary-number-box-effect-equal {
+  @extend .primary-number-box-effect;
+  -webkit-box-shadow: 0px 0px 40px 10px rgba(37, 188, 212, .5);
+  -moz-box-shadow:    0px 0px 40px 10px rgba(37, 188, 212, .5);
+  box-shadow:         0px 0px 40px 10px rgba(37, 188, 212, .5);
+}
+
+.primary-number-box-effect-increase {
+  @extend .primary-number-box-effect;
+  -webkit-box-shadow: 0px 0px 40px 10px rgba(68, 216, 31, .5);
+  -moz-box-shadow:    0px 0px 40px 10px rgba(68, 216, 31, .5);
+  box-shadow:         0px 0px 40px 10px rgba(68, 216, 31, .5);
+}
+
+.primary-number-box-effect-decrease {
+  @extend .primary-number-box-effect;
+  -webkit-box-shadow: 0px 0px 40px 10px rgba(185, 43, 141, .5);
+  -moz-box-shadow:    0px 0px 40px 10px rgba(185, 43, 141, .5);
+  box-shadow:         0px 0px 40px 10px rgba(185, 43, 141, .5);
+}
+
+.number-with-delta-effect-equal {
+  color: blue;
+}
+
+.number-with-delta-effect-increase {
+  color: green;
+}
+
+
+.number-with-delta-effect-decrease {
+  color: red;
+}
+
+.c3-chart-lines .c3-circles .c3-circle {
+    display: none;
+}
+
+.c3-tooltip-container {
+  display: none !important;
+}
