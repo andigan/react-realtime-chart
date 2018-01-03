@@ -103,7 +103,7 @@ const RealTimeChart = (props) => {
           />
         </div>
       </div>
-      <div>Powered by <a href="https://www.coindesk.com/price/">CoinDesk</a></div>
+      <div>Data Provided By / Powered by <a href="https://www.coindesk.com/price/">CoinDesk</a></div>
       <div
         style={{
           height: "10px",
