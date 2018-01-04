@@ -3,7 +3,7 @@ A minimal realtime analytics component using:
 
 * React
 * Redux
-* Redux-Saga (for asynch short polling)
+* Redux-Saga (for asynch polling)
 * C3 (for charting)
 
 Command line:
