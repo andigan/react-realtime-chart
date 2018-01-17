@@ -10,33 +10,33 @@ import 'c3/c3.css';
 
 import {stopPolling, startPolling} from '../actions';
 
+function getChange(newValue, oldValue) {
+  if (newValue === oldValue) {
+    return "equal";
+  }
+  if (newValue > oldValue) {
+    return "increase";
+  } else {
+    return "decrease";
+  }
+}
+
 const RealTimeChart = (props) => {
 
   let {
     chartArray,
     polling,
+    chartCurrentIndex,
     stopPolling, // action
     startPolling // action
   } = props;
 
-  let mostRecentTotal = chartArray.length > 0 ? parseInt(chartArray.slice(-1)[0]) : null;
-  let secondmostRecentTotal = chartArray.length > 1 ? parseInt(chartArray.slice(-2,-1)[0]) : null;
-  let delta = "equal";
+  let mostRecentTotal = chartArray[chartCurrentIndex - 1];
+  let secondmostRecentTotal = chartArray[chartCurrentIndex - 2];
 
-  function getChange(newValue, oldValue) {
-    if (newValue === oldValue) {
-      return "equal";
-    }
-    if (newValue > oldValue) {
-      return "increase";
-    } else {
-      return "decrease";
-    }
-  }
+  let delta = mostRecentTotal && secondmostRecentTotal ? getChange(mostRecentTotal, secondmostRecentTotal) : "equal";
 
-  if (mostRecentTotal && secondmostRecentTotal) {
-    delta = getChange(mostRecentTotal, secondmostRecentTotal);
-  }
+  console.log(chartArray);
 
   return (
     <div>
@@ -59,7 +59,7 @@ const RealTimeChart = (props) => {
           }}>
           <PrimaryNumberDisplay
             label="Current BitCoin Value"
-            value={mostRecentTotal}
+            value={mostRecentTotal ? "$" + mostRecentTotal : null}
             delta={delta}
             message="(random +/-20 for more dynamic demo)"
           />
@@ -96,7 +96,7 @@ const RealTimeChart = (props) => {
             }}
             data={{
               columns: [
-                ['data1', ...chartArray]
+                ['data1', ...chartArray.slice(0, chartCurrentIndex)]
               ],
               type: "line"
             }}
@@ -118,7 +118,8 @@ const RealTimeChart = (props) => {
 function mapStateToProps(state) {
   return {
     chartArray: state.analytics.chartArray,
-    polling: state.analytics.polling
+    polling: state.analytics.polling,
+    chartCurrentIndex: state.analytics.chartCurrentIndex
   };
 }
 

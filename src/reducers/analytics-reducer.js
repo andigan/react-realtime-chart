@@ -1,7 +1,16 @@
+const visitsRecentArrMax = 25,
+      cutFromArrayWhenMaxReached = 1;
+
+var fixedArraySize = new Array(visitsRecentArrMax).fill(null);
+
 let initialState = {
-  chartArray: [],
-  polling: false
+  polling: false,
+
+  chartArray: fixedArraySize,
+  chartCurrentIndex: 0
 };
+
+var counterForDemo = 0;
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -17,10 +26,16 @@ export default (state = initialState, action) => {
       };
     case "GET_DATA_SUCCESS":
 
-      return {
-        ...state,
-       chartArray: [...state.chartArray, action.payload.chartData ]
-      };
+    if (false) {
+      action.payload.chartData = counterForDemo;
+      counterForDemo += 1;
+    }
+
+    return {
+      ...state,
+      chartArray: state.chartCurrentIndex !== visitsRecentArrMax ? state.chartArray.map((item, index) => index != state.chartCurrentIndex ? item : +action.payload.chartData.toFixed(2)) : state.chartArray.map((item, index, arr) => index >= visitsRecentArrMax - cutFromArrayWhenMaxReached ? null : arr[index + cutFromArrayWhenMaxReached]).map((item, index) => index != visitsRecentArrMax - cutFromArrayWhenMaxReached ? item : +action.payload.chartData.toFixed(2)),
+      chartCurrentIndex: state.chartCurrentIndex !== visitsRecentArrMax ? state.chartCurrentIndex + 1 : visitsRecentArrMax - cutFromArrayWhenMaxReached + 1
+    };
     default:
       return state;
   }

@@ -13,7 +13,10 @@ const ENDPOINT_BITCOIN = 'https://api.coindesk.com/v1/bpi/currentprice.json';
 
 const API_DELAY = 2000;
 
-export function* initialSaga() {
+var pollFailCount = 0,
+    pollFailCountLimit = 10;
+
+export function* sagaInit() {
   yield all([
     watchForPollActions(),
     initialize()
@@ -38,14 +41,18 @@ function* watchForPollActions() {
 
 function* startPollLoop(action) {
   console.log("3: startPollLoop started");
+
+  var counter = 0,
+      payload;
+
   while (true) {
     try {
-
+      // counter += 1;
       const responsesPromiseObject = yield Promise.props({
         bitcoinResponse: yield call(() => axios({ url: ENDPOINT_BITCOIN }))
       }).then((result) => result);
 
-      let payload = {
+      payload = {
         chartData: parseFloat(responsesPromiseObject.bitcoinResponse.data.bpi.USD.rate.replace(/,/g, '')) + Math.floor(Math.random() * 10)
       };
 
@@ -60,4 +67,23 @@ function* startPollLoop(action) {
         }
     }
   }
+
+  // this optional section is to stress test the component to identify memory problems more quickly
+  // var stressTest = true;
+  // while (stressTest) {
+  //
+  //   try {
+  //     payload = {Math.floor(Math.random() * 10)};
+  //
+  //     yield put ({type: "GET_DATA_SUCCESS", payload});
+  //     yield call(delay, 10);
+  //   } catch (err) {
+  //     yield put ({type: "GET_DATA_FAILURE", err});
+  //     pollFailCount += 1;
+  //     if (pollFailCount >= pollFailCountLimit) {
+  //       console.log(`Poll Fail Count: ${pollFailCount}.  Polling stopped.  ${err.config.url}`);
+  //       yield put ({type: "POLL_STOP"});
+  //     }
+  //   }
+  // }
 }
